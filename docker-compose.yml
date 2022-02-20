@@ -1,0 +1,48 @@
+version: "3"
+services:
+  main:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    container_name: main
+    env_file: .env
+    command: npm run start:dev
+    ports:
+      - $PORT:$PORT
+    volumes:
+      - .:/usr/app
+      - /usr/app/node_modules 
+    depends_on:
+      - db_pgsql
+      - mongo
+    restart: unless-stopped
+
+  db_pgsql:
+    image: postgres:13.5
+    container_name: pgsql
+    environment:
+      POSTGRES_DB: $POSTGRES_DB
+      POSTGRES_USER: $POSTGRES_USER
+      POSTGRES_PASSWORD: $POSTGRES_PASSWORD
+      PG_DATA: "/var/lib/postgres/data/"
+    ports:
+      - $POSTGRES_PORT:$POSTGRES_PORT
+    volumes:
+      - pgdata:/var/lib/postgres/data
+    restart: unless-stopped    
+
+  mongo:
+    image : mongo
+    container_name: mongodb
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: $MONGO_USERNAME
+      MONGO_INITDB_ROOT_PASSWORD: $MONGO_PASSWORD
+    ports:
+      - 27017:27017
+    volumes:
+      - mgdata:/var/lib/postgres/data
+    restart: unless-stopped
+
+volumes:
+  pgdata:
+  mgdata:

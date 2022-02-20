@@ -1,0 +1,73 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type Group {
+  _id: String
+  name: String!
+  authorId: String
+  usersId: [String!]
+}
+
+type User {
+  _id: String
+  email: String
+  username: String
+  groups: [Group!]
+  friendsId: [String!]
+}
+
+type UserType {
+  _id: String
+  email: String
+  username: String
+  groups: [Group!]
+  friendsId: [User!]
+}
+
+type GroupType {
+  _id: String
+  name: String
+  authorId: User
+  usersId: [User!]
+}
+
+type Query {
+  getUser(_id: String!): UserType!
+  getUsers: [User!]!
+  removeUser(_id: String!): User!
+  getGroup(_id: String!): GroupType!
+  getGroups: [Group!]!
+  removeGroup(_id: String!): Group!
+}
+
+type Mutation {
+  createUser(user: CreateUserDto!): User!
+  updateUser(_id: String!, user: CreateUserDto!): User!
+  addFriends(user: AddFriendsDto!): User!
+  createGroup(group: CreateGroupDto!): Group!
+  updateGroup(_id: String!, group: CreateGroupDto!): Group!
+  addUsersGroup(group: AddUsersGroupDto!): Group!
+}
+
+input CreateUserDto {
+  email: String!
+  username: String!
+  friendsId: [String!]
+}
+
+input AddFriendsDto {
+  _id: String!
+  friendsId: [String!]!
+}
+
+input CreateGroupDto {
+  name: String!
+  authorId: String!
+  usersId: [String!]!
+}
+
+input AddUsersGroupDto {
+  _id: String!
+  usersId: [String!]!
+}
